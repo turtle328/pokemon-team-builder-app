@@ -1,0 +1,13 @@
+.pure-menu {
+  background-color: white;
+}
+
+.pure-menu-link:hover {
+  background-color: red;
+  color: white;
+}
+
+.selected, .selected:hover, .selected:focus {
+  background-color: rgb(160, 160, 160);
+  color: white;
+}
