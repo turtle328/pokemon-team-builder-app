@@ -1,14 +1,14 @@
 import React from 'react';
-import './App.css';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
-import CreateTeam from './components/CreateTeam'
-import RandomTeam from './components/RandomTeam'
-import EditTeam from './components/EditTeam'
-import Admin from './components/Admin'
-import Login from './components/Login'
-import PageNotFound from './components/PageNotFound'
+import CreateTeam from './components/CreateTeam/CreateTeam';
+import RandomTeam from './components/RandomTeam';
+import EditTeam from './components/EditTeam';
+import Admin from './components/Admin';
+import Login from './components/Login';
+import PageNotFound from './components/PageNotFound';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import SnackbarProvider from 'react-simple-snackbar';
 
 function App() {
   // const [word, setWord] = React.useState('software');
@@ -23,27 +23,29 @@ function App() {
   return (
     <Router>
       <div className="container">
-        <Navbar />
+        <SnackbarProvider>
+          <Navbar />
+        </SnackbarProvider>
         <Switch>
           <Route exact path="/">
             <Home />
           </Route>
-          <Route path='/create-team'>
+          <Route path="/create-team">
             <CreateTeam />
           </Route>
-          <Route path='/random-team'>
+          <Route path="/random-team">
             <RandomTeam />
           </Route>
-          <Route path='/edit-team'>
+          <Route path="/edit-team">
             <EditTeam />
           </Route>
-          <Route path='/admin'>
+          <Route path="/admin">
             <Admin />
           </Route>
-          <Route path='/login'>
+          <Route path="/login">
             <Login />
           </Route>
-          <Route path='/'>
+          <Route path="/">
             <PageNotFound />
           </Route>
         </Switch>
