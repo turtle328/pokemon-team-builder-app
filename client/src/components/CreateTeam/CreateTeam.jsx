@@ -3,9 +3,9 @@ import PokemonSlot from './PokemonSlot';
 import PokemonSearchForm from './PokemonSearchForm';
 import SaveTeamForm from './SaveTeamForm';
 import PokemonContainer from './PokemonContainer';
-import LoadingOverlay from 'react-loading-overlay';
 import Pokemon from '../../classes/Pokemon';
 import styled from 'styled-components';
+import { SpinnerComponent } from 'react-element-spinner';
 
 const Container = styled.main`
   display: flex;
@@ -80,31 +80,30 @@ const CreateTeam = () => {
   };
 
   return (
-    <LoadingOverlay active={isActive} spinner text="Loading in Pokedex">
-      <Container>
-        <Panel className="custom-scrollbar">
-          <TeamView>
-            <Heading>Team View</Heading>
-            {team.map((pokemon, index) => {
-              return <PokemonSlot key={index} pokemon={pokemon} slotNum={index} />;
-            })}
-          </TeamView>
-          <div id="pokemon-search">
-            <Heading>Pokemon Search</Heading>
-            <PokemonSearchForm />
-          </div>
-          <div id="team-save">
-            <Heading>Save Team</Heading>
-            <SaveTeamForm />
-          </div>
-        </Panel>
-        <PokemonSelection>
-          {pokemonList.map((pokemon, index) => {
-            return <PokemonContainer key={index} pokemon={pokemon} />;
+    <Container>
+      <Panel className="custom-scrollbar">
+        <TeamView>
+          <Heading>Team View</Heading>
+          {team.map((pokemon, index) => {
+            return <PokemonSlot key={index} pokemon={pokemon} slotNum={index} />;
           })}
-        </PokemonSelection>
-      </Container>
-    </LoadingOverlay>
+        </TeamView>
+        <div id="pokemon-search">
+          <Heading>Pokemon Search</Heading>
+          <PokemonSearchForm />
+        </div>
+        <div id="team-save">
+          <Heading>Save Team</Heading>
+          <SaveTeamForm />
+        </div>
+      </Panel>
+      <PokemonSelection>
+        <SpinnerComponent loading={isActive} position="global" message="Fetching Pokedex" />
+        {pokemonList.map((pokemon, index) => {
+          return <PokemonContainer key={index} pokemon={pokemon} />;
+        })}
+      </PokemonSelection>
+    </Container>
   );
 };
 
