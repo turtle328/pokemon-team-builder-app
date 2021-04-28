@@ -11,15 +11,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import SnackbarProvider from 'react-simple-snackbar';
 
 function App() {
-  // const [word, setWord] = React.useState('software');
-  // const [associations, setAssociations] = React.useState(null);
-  // const getAssociations = () => {
-  //   fetch('/api/associations/' + word)
-  //     .then(result => result.json())
-  //     .then(body => setAssociations(body))
-  //     .catch(error => console.log(error))
-  // };
-
   return (
     <Router>
       <div className="container">

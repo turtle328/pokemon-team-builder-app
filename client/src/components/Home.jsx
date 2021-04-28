@@ -25,7 +25,7 @@ const Box = styled.div`
   min-height: 400px;
   padding: 1em;
   border: inset 4px black;
-  background-color: #ffde00;
+  background-color: var(--pokemon-yellow);
   border-radius: 1em;
 `;
 
@@ -40,7 +40,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    document.body.style.backgroundColor = '#3B4CCA';
+    document.body.style.backgroundColor = 'var(--pokemon-blue)';
 
     return () => {
       document.body.style.backgroundColor = '#FFF';
