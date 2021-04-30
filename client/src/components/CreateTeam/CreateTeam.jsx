@@ -153,9 +153,32 @@ const CreateTeam = () => {
   };
 
   const filterPokemonList = filters => {
-    console.log('filtering list');
-    console.log(pokemonList.current);
-    console.log(filters);
+    let list = [...pokemonList.current];
+    const { types, searchType, search } = filters;
+
+    if (!types.includes('any')) {
+      console.log('filtering');
+      list = list.filter(pokemon => {
+        switch (searchType) {
+          case 'and':
+            for (const selectedType of types) {
+              if (!pokemon.types.includes(selectedType)) {
+                return false;
+              }
+            }
+            return true;
+          default:
+            console.error('Unknown search type: ' + searchType);
+            return false;
+        }
+      });
+    }
+
+    if (search) {
+      list = list.filter(pokemon => pokemon.name.includes(search.toLowerCase()));
+    }
+
+    setPokemonList(list);
   };
 
   return (

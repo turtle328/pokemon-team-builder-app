@@ -6,6 +6,7 @@ const Container = styled.div`
   cursor: pointer;
   border: 2px solid black;
   transition: transform 0.2s;
+  height: fit-content;
 
   &:hover {
     transform: scale(1.1);
