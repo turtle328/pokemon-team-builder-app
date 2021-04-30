@@ -1,13 +1,51 @@
 import React from 'react';
+import styled from 'styled-components';
+import { typeColors } from '../../js/shared';
 
-const PokemonSlot = ({ pokemon, slotNum }) => {
+const TeamSlot = styled.div`
+  text-align: center;
+`;
+
+const PokemonName = styled.p`
+  text-transform: capitalize;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const PokemonType = styled.span`
+  text-transform: uppercase;
+  color: ${props => (props.isDefault ? 'black' : 'white')};
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px;
+  margin-right: 2px;
+`;
+
+const TypeContainer = styled.div`
+  display: flex;
+  flex-flow: column wrap;
+  max-width: 150px;
+`;
+const PokemonSlot = ({ pokemon, slotNum, removeFromSlot }) => {
   return (
-    <div className="team-slot" style={{ textAlign: 'center' }}>
+    <TeamSlot
+      style={pokemon.isDefault() || { cursor: 'no-drop' }}
+      onClick={() => removeFromSlot(pokemon, slotNum)}>
       <img src={pokemon.sprite} alt={`team slot ${slotNum + 1}`} style={{ maxHeight: '100px' }} />
-      <p className="poke-name">{pokemon.name}</p>
-      <span className="poke-type-1">{pokemon.types[0]}</span>
-      <span className="poke-type-2">{pokemon.types[1]}</span>
-    </div>
+      <PokemonName>{pokemon.name}</PokemonName>
+      <TypeContainer>
+        {pokemon.types.map((type, index) => {
+          return (
+            <PokemonType
+              key={index}
+              isDefault={pokemon.isDefault()}
+              style={{ backgroundColor: typeColors[type] }}>
+              {type}
+            </PokemonType>
+          );
+        })}
+      </TypeContainer>
+    </TeamSlot>
   );
 };
 

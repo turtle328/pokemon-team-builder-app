@@ -2,7 +2,7 @@ import React from 'react';
 
 const SaveTeamForm = () => {
   const Input = {
-    width: '160px',
+    width: '200px',
   };
 
   return (

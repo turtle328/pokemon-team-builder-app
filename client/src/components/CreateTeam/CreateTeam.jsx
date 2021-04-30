@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PokemonSlot from './PokemonSlot';
 import PokemonSearchForm from './PokemonSearchForm';
 import SaveTeamForm from './SaveTeamForm';
@@ -23,7 +23,7 @@ const Heading = styled.h1`
 
 const PanelContainer = styled.div`
   z-index: 2;
-  width: 400px;
+  width: 450px;
   flex-shrink: 0;
   transition: width 1s;
 `;
@@ -47,20 +47,23 @@ const TeamView = styled.div`
 
 const PokemonSelection = styled.div`
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: ${props => (props.panelIsCollapsed ? 'repeat(9, 1fr)' : 'repeat(7, 1fr)')};
   gap: 4px;
   padding: 4px;
 
   @media (max-width: 1280px) {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: ${props =>
+      props.panelIsCollapsed ? 'repeat(7, 1fr)' : 'repeat(5, 1fr)'};
   }
 
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
+  @media (max-width: 1040px) {
+    grid-template-columns: ${props =>
+      props.panelIsCollapsed ? 'repeat(5, 1fr)' : 'repeat(3, 1fr)'};
   }
 
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 820px) {
+    grid-template-columns: ${props =>
+      props.panelIsCollapsed ? 'repeat(4, 1fr)' : 'repeat(2, 1fr)'};
   }
 `;
 
@@ -70,6 +73,7 @@ const CollapseIcon = styled(FontAwesomeIcon)`
   font-size: 3.5em;
   top: 0px;
   right: 5px;
+  transition: transform 0.2s;
 
   &:hover {
     transform: scale(1.2);
@@ -86,17 +90,21 @@ const ExpandIcon = styled(CollapseIcon)`
 const CreateTeam = () => {
   const COUNT = 721;
 
+  // a variable to save a copy to the full list
+  // this is necessary because the state list can be filtered
+  const pokemonList = useRef();
+
   const [team, setTeam] = useState(new Array(6).fill(new Pokemon()));
-  const [pokemonList, setPokemonList] = useState([]);
+  const [filteredList, setPokemonList] = useState([]);
   const [isActive, setActive] = useState(true);
   const [isCollapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     const getPokemon = async () => {
-      const pokemonFromServer = await fetchPokemon();
-      setPokemonList(pokemonFromServer);
+      pokemonList.current = await fetchPokemon();
+      setPokemonList(pokemonList.current);
       setActive(false);
-      console.log(pokemonFromServer);
+      console.log(pokemonList.current);
     };
 
     getPokemon();
@@ -133,21 +141,53 @@ const CreateTeam = () => {
     setTeam(newTeam);
   };
 
+  const removePokemonFromSlot = (pokemon, slot) => {
+    if (pokemon.isDefault()) return;
+
+    // make copy of the team array with a default Pokemon slot appended to the end of it
+    const newTeam = [...team, new Pokemon()];
+    // remove pokemon at the index
+    newTeam.splice(slot, 1);
+    // update state
+    setTeam(newTeam);
+  };
+
+  const filterPokemonList = filters => {
+    console.log('filtering list');
+    console.log(pokemonList.current);
+    console.log(filters);
+  };
+
   return (
     <Container>
-      <ExpandIcon icon={faCaretRight} onClick={() => setCollapsed(false)} />
+      <ExpandIcon
+        icon={faCaretRight}
+        onClick={() => setCollapsed(false)}
+        title="Expand this panel"
+      />
       <PanelContainer style={isCollapsed ? { width: '0px' } : {}}>
         <Panel className="custom-scrollbar">
-          <CollapseIcon icon={faCaretLeft} onClick={() => setCollapsed(true)} />
+          <CollapseIcon
+            icon={faCaretLeft}
+            onClick={() => setCollapsed(true)}
+            title="Collapse this panel"
+          />
           <TeamView>
             <Heading>Team View</Heading>
             {team.map((pokemon, index) => {
-              return <PokemonSlot key={index} pokemon={pokemon} slotNum={index} />;
+              return (
+                <PokemonSlot
+                  key={index}
+                  pokemon={pokemon}
+                  slotNum={index}
+                  removeFromSlot={removePokemonFromSlot}
+                />
+              );
             })}
           </TeamView>
           <div id="pokemon-search">
             <Heading>Pokemon Search</Heading>
-            <PokemonSearchForm />
+            <PokemonSearchForm filterPokemonList={filterPokemonList} />
           </div>
           <div id="team-save">
             <Heading>Save Team</Heading>
@@ -155,9 +195,9 @@ const CreateTeam = () => {
           </div>
         </Panel>
       </PanelContainer>
-      <PokemonSelection>
+      <PokemonSelection panelIsCollapsed={isCollapsed}>
         <SpinnerComponent loading={isActive} position="global" message="Fetching Pokedex" />
-        {pokemonList.map((pokemon, index) => {
+        {filteredList.map((pokemon, index) => {
           return <PokemonContainer key={index} pokemon={pokemon} setTeamSlot={setTeamSlot} />;
         })}
       </PokemonSelection>

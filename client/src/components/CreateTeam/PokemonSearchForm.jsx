@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const PokemonSearchForm = () => {
+const PokemonSearchForm = ({ filterPokemonList }) => {
   const SearchButton = {
     alignSelf: 'flex-end',
     marginBottom: '8px',
     marginLeft: '10px',
-    padding: '6px 24px',
+  };
+
+  const [types, setTypes] = useState(['any']);
+  const [searchType, setSearchType] = useState('and');
+  const [search, setSearch] = useState();
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const filters = { types, searchType, search };
+    filterPokemonList(filters);
   };
 
   return (
-    <form id="search-form" className="pure-form pure-form-stacked">
+    <form id="search-form" className="pure-form pure-form-stacked" onSubmit={e => handleSubmit(e)}>
       <div>
         <label className="bold" htmlFor="type-select">
           Type
         </label>
-        <select multiple id="type-select" style={{ width: '150px', height: '120px' }}>
+        <select
+          multiple={true}
+          value={types}
+          onChange={e => setTypes(Array.from(e.target.selectedOptions, option => option.value))}
+          id="type-select"
+          style={{ width: '150px', height: '120px' }}>
           <option value="any">Any</option>
           <option value="normal">Normal</option>
           <option value="fighting">Fighting</option>
@@ -37,25 +51,62 @@ const PokemonSearchForm = () => {
         </select>
       </div>
       <div>
-        <p className="bold" style={{ marginBottom: '8px' }}>
-          Search Options
-        </p>
-        <label htmlFor="andRadio">
-          <input type="radio" name="searchOption" id="andRadio" value="and" defaultChecked /> AND
+        <p className="bold">Search Options</p>
+        <label htmlFor="andRadio" className="pure-radio">
+          <input
+            type="radio"
+            name="searchOption"
+            id="andRadio"
+            value="and"
+            checked={searchType === 'and'}
+            onChange={e => setSearchType(e.target.value)}
+          />{' '}
+          AND
         </label>
-        <label htmlFor="orRadio">
-          <input type="radio" name="searchOption" id="orRadio" value="or" /> OR
+        <label htmlFor="orRadio" className="pure-radio">
+          <input
+            type="radio"
+            name="searchOption"
+            id="orRadio"
+            value="or"
+            checked={searchType === 'or'}
+            onChange={e => setSearchType(e.target.value)}
+          />{' '}
+          OR
         </label>
-        <label htmlFor="notRadio">
-          <input type="radio" name="searchOption" id="notRadio" value="not" /> NOT
+        <label htmlFor="notRadio" className="pure-radio">
+          <input
+            type="radio"
+            name="searchOption"
+            id="notRadio"
+            value="not"
+            checked={searchType === 'not'}
+            onChange={e => setSearchType(e.target.value)}
+          />{' '}
+          NOT
         </label>
-        <label htmlFor="onlyRadio">
-          <input type="radio" name="searchOption" id="onlyRadio" value="only" /> ONLY
+        <label htmlFor="onlyRadio" className="pure-radio">
+          <input
+            type="radio"
+            name="searchOption"
+            id="onlyRadio"
+            value="only"
+            checked={searchType === 'only'}
+            onChange={e => setSearchType(e.target.value)}
+          />{' '}
+          ONLY
         </label>
       </div>
       <div style={{ display: 'flex', gridColumn: '1 / span 2' }}>
         <label className="bold" htmlFor="search-bar">
-          Pokemon Name <input type="search" id="search-bar" placeholder="Enter a pokemon" />
+          Pokemon Name{' '}
+          <input
+            type="search"
+            id="search-bar"
+            placeholder="Enter a pokemon"
+            style={{ width: '250px' }}
+            onChange={e => setSearch(e.target.value)}
+          />
         </label>
         <button className="pure-button pure-button-primary" style={SearchButton}>
           Search

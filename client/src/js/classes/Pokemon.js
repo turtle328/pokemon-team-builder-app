@@ -1,7 +1,7 @@
 import DefaultSprite from '../../media/team-placeholder.jpg';
 
 class Pokemon {
-  constructor(name = '???', types = ['Type', ''], sprite = DefaultSprite) {
+  constructor(name = '???', types = ['Type'], sprite = DefaultSprite) {
     this.name = name;
     this.types = types;
     this.sprite = sprite;
