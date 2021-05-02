@@ -15,14 +15,21 @@
 
 body {
   font-family: 'Poppins', sans-serif;
+  background-color: var(--pokemon-blue);
 }
 
 .bold {
   font-weight: bold;
 }
 
+.button-danger {
+  color: white;
+  background: rgb(202, 60, 60);
+}
+
 .pure-form input[type='text'],
-.pure-form input[type='search'] {
+.pure-form input[type='search'],
+.pure-form input[type='password'] {
   border: 1px solid black;
 }
 
@@ -32,6 +39,28 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 1em;
   padding: 1em;
+}
+
+.modal-form {
+  background-color: var(--pokemon-yellow);
+  border: 3px solid black;
+  padding: 20px;
+}
+
+.Modal {
+  width: fit-content;
+  margin: 150px auto;
+  z-index: 15;
+}
+
+.Overlay {
+  z-index: 10;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -55,4 +84,8 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:active {
   background: rgb(68, 68, 68);
   border-radius: 10px;
+}
+
+div[class^='Snackbar_snackbar-wrapper'] {
+  z-index: 1100;
 }

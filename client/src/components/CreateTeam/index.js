@@ -11,7 +11,6 @@ import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.main`
   display: flex;
-  background-color: var(--pokemon-blue);
 `;
 
 const Heading = styled.h1`
@@ -48,6 +47,7 @@ const TeamView = styled.div`
 const PokemonSelection = styled.div`
   display: grid;
   grid-template-columns: ${props => (props.panelIsCollapsed ? 'repeat(9, 1fr)' : 'repeat(7, 1fr)')};
+  grid-auto-rows: max-content;
   gap: 4px;
   padding: 4px;
 
@@ -101,7 +101,16 @@ const CreateTeam = () => {
 
   useEffect(() => {
     const getPokemon = async () => {
-      pokemonList.current = await fetchPokemon();
+      // first check if the list is stored in local storage
+      const list = sessionStorage.getItem('pokemonList');
+      if (list) {
+        pokemonList.current = JSON.parse(list);
+      }
+      // otherwise grab the data from the server and save it to storage
+      else {
+        pokemonList.current = await fetchPokemon();
+        sessionStorage.setItem('pokemonList', JSON.stringify(pokemonList.current));
+      }
       setPokemonList(pokemonList.current);
       setActive(false);
       console.log(pokemonList.current);
@@ -157,7 +166,6 @@ const CreateTeam = () => {
     const { types, searchType, search } = filters;
 
     if (!types.includes('any')) {
-      console.log('filtering');
       list = list.filter(pokemon => {
         switch (searchType) {
           case 'and':
@@ -167,8 +175,29 @@ const CreateTeam = () => {
               }
             }
             return true;
+          case 'or':
+            for (const selectedType of types) {
+              if (pokemon.types.includes(selectedType)) {
+                return true;
+              }
+            }
+            return false;
+          case 'not':
+            for (const selectedType of types) {
+              if (pokemon.types.includes(selectedType)) {
+                return false;
+              }
+            }
+            return true;
+          case 'only':
+            for (const selectedType of types) {
+              if (pokemon.types.includes(selectedType) && pokemon.types.length === 1) {
+                return true;
+              }
+            }
+            return false;
           default:
-            console.error('Unknown search type: ' + searchType);
+            console.log('Unknown search type: ' + searchType);
             return false;
         }
       });

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import pokemonLogo from '../media/pokemon-team-builder.png';
 import styled from 'styled-components';
@@ -38,14 +38,6 @@ const Home = () => {
   const Paragraph = {
     margin: '0.8em',
   };
-
-  useEffect(() => {
-    document.body.style.backgroundColor = 'var(--pokemon-blue)';
-
-    return () => {
-      document.body.style.backgroundColor = '#FFF';
-    };
-  });
 
   return (
     <main style={{ padding: '2em 15%' }} className="pure-g">
@@ -99,7 +91,11 @@ const Home = () => {
             Check out the <StyledLink to="/page-not-found">404</StyledLink> page.
           </p>
           <p style={Paragraph}>
-            Like the logo? Make your own <a href="https://textcraft.net/">here</a>!
+            Like the logo? Make your own{' '}
+            <StyledLink as="a" href="https://textcraft.net/">
+              here
+            </StyledLink>
+            !
           </p>
         </Box>
       </InfoContainer>

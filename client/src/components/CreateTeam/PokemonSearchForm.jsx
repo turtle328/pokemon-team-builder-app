@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const PokemonSearchForm = ({ filterPokemonList }) => {
-  const SearchButton = {
+  const Button = {
     alignSelf: 'flex-end',
     marginBottom: '8px',
     marginLeft: '10px',
@@ -15,6 +15,12 @@ const PokemonSearchForm = ({ filterPokemonList }) => {
     e.preventDefault();
     const filters = { types, searchType, search };
     filterPokemonList(filters);
+  };
+
+  const resetFilters = e => {
+    setTypes(['any']);
+    setSearchType('and');
+    setSearch('');
   };
 
   return (
@@ -104,12 +110,16 @@ const PokemonSearchForm = ({ filterPokemonList }) => {
             type="search"
             id="search-bar"
             placeholder="Enter a pokemon"
-            style={{ width: '250px' }}
+            style={{ width: '220px' }}
+            value={search}
             onChange={e => setSearch(e.target.value)}
           />
         </label>
-        <button className="pure-button pure-button-primary" style={SearchButton}>
+        <button className="pure-button pure-button-primary" style={Button}>
           Search
+        </button>
+        <button className="pure-button button-danger" style={Button} onClick={e => resetFilters(e)}>
+          Reset
         </button>
       </div>
     </form>
