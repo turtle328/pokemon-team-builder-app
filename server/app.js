@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -12,7 +14,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // Set up mongoose instance
-const mongoUrl = 'mongodb+srv://alexRosenbach:KlaqWwJaxD4JDD8V@cluster0.xonqb.mongodb.net/PokemonApp';
+const mongoUrl = process.env.DB_STRING;
 
 const mongoOptions = {
   useNewUrlParser: true,
@@ -41,7 +43,7 @@ const sessionStore = new MongoStore({
 });
 app.use(
   session({
-    secret: 'Bq87^s57BQRS',
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
