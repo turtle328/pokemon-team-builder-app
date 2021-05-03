@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import CreateTeam from './components/CreateTeam';
@@ -6,31 +6,44 @@ import RandomTeam from './components/RandomTeam';
 import EditTeam from './components/EditTeam';
 import Admin from './components/Admin';
 import PageNotFound from './components/PageNotFound';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import SnackbarProvider from 'react-simple-snackbar';
+import Unauthorized from './components/Unauthorized';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App() {
   const [user, setUser] = useState('');
 
+  useEffect(() => {
+    fetch('/getUsername')
+      .then(res => res.json())
+      .then(userObj => setUser(userObj.username));
+  }, []);
+
   return (
     <Router>
-      <div className="container">
-        <SnackbarProvider>
-          <Navbar user={user} setUser={setUser} />
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/create-team">{user === '' ? <Redirect to="/" /> : <CreateTeam />}</Route>
-            <Route path="/random-team">{user === '' ? <Redirect to="/" /> : <RandomTeam />}</Route>
-            <Route path="/edit-team">{user === '' ? <Redirect to="/" /> : <EditTeam />}</Route>
-            <Route path="/admin">{user === '' ? <Redirect to="/" /> : <Admin />}</Route>
-            <Route path="/">
-              <PageNotFound />
-            </Route>
-          </Switch>
-        </SnackbarProvider>
-      </div>
+      <Navbar user={user} setUser={setUser} />
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="/create-team">
+          <CreateTeam />
+        </Route>
+        <Route path="/random-team">
+          <RandomTeam />
+        </Route>
+        <Route path="/edit-team">
+          <EditTeam />
+        </Route>
+        <Route path="/admin">
+          <Admin />
+        </Route>
+        <Route path="/unauthorized">
+          <Unauthorized />
+        </Route>
+        <Route path="/">
+          <PageNotFound />
+        </Route>
+      </Switch>
     </Router>
   );
 }

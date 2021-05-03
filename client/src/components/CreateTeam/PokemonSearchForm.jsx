@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
+import styles from './index.module.scss';
 
 const PokemonSearchForm = ({ filterPokemonList }) => {
-  const Button = {
-    alignSelf: 'flex-end',
-    marginBottom: '8px',
-    marginLeft: '10px',
-  };
-
   const [types, setTypes] = useState(['any']);
   const [searchType, setSearchType] = useState('and');
   const [search, setSearch] = useState();
@@ -115,10 +110,10 @@ const PokemonSearchForm = ({ filterPokemonList }) => {
             onChange={e => setSearch(e.target.value)}
           />
         </label>
-        <button className="pure-button pure-button-primary" style={Button}>
-          Search
-        </button>
-        <button className="pure-button button-danger" style={Button} onClick={e => resetFilters(e)}>
+        <button className={`pure-button pure-button-primary ${styles.button}`}>Search</button>
+        <button
+          className={`pure-button button-danger ${styles.button}`}
+          onClick={e => resetFilters(e)}>
           Reset
         </button>
       </div>

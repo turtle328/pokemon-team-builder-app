@@ -1,0 +1,10 @@
+.button {
+  align-self: flex-end;
+  margin-bottom: 8px;
+  margin-left: 10px;
+
+  &.buttonSave {
+    width: 130px;
+    margin-bottom: 4px;
+  }
+}

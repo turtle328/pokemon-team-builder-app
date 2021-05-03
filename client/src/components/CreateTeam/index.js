@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import PokemonSlot from './PokemonSlot';
 import PokemonSearchForm from './PokemonSearchForm';
 import SaveTeamForm from './SaveTeamForm';
@@ -8,6 +9,7 @@ import styled from 'styled-components';
 import { SpinnerComponent } from 'react-element-spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import { useSnackbar } from 'react-simple-snackbar';
 
 const Container = styled.main`
   display: flex;
@@ -99,12 +101,20 @@ const CreateTeam = () => {
   const [isActive, setActive] = useState(true);
   const [isCollapsed, setCollapsed] = useState(false);
 
+  const [openSnackbar] = useSnackbar();
+  const history = useHistory();
+
   useEffect(() => {
     const getPokemon = async () => {
       // first check if the list is stored in local storage
       const list = sessionStorage.getItem('pokemonList');
       if (list) {
-        pokemonList.current = JSON.parse(list);
+        // parse the list into an array
+        const parsedList = JSON.parse(list);
+        // convert the list of "Pokemon" into real ES6 Pokemon classes using the constructor
+        pokemonList.current = parsedList.map(
+          pokemon => new Pokemon(pokemon.name, pokemon.types, pokemon.sprite)
+        );
       }
       // otherwise grab the data from the server and save it to storage
       else {
@@ -210,6 +220,38 @@ const CreateTeam = () => {
     setPokemonList(list);
   };
 
+  const saveTeam = teamName => {
+    // get team with filtered empty slots
+    const filteredTeam = team.filter(pokemon => !pokemon.isDefault());
+
+    // check if team has any slots
+    if (filteredTeam.length === 0) {
+      return openSnackbar('The team needs at least one Pokemon.');
+    }
+
+    const teamObj = { teamName, filteredTeam };
+
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(teamObj),
+    };
+
+    fetch('/saveTeam', requestOptions)
+      .then(res => {
+        if (res.redirected) {
+          return history.push('/unauthorized');
+        } else {
+          return res.json();
+        }
+      })
+      .then(data => {
+        if (data) {
+          openSnackbar(data.message);
+        }
+      });
+  };
+
   return (
     <Container>
       <ExpandIcon
@@ -243,7 +285,7 @@ const CreateTeam = () => {
           </div>
           <div id="team-save">
             <Heading>Save Team</Heading>
-            <SaveTeamForm />
+            <SaveTeamForm saveTeam={saveTeam} />
           </div>
         </Panel>
       </PanelContainer>

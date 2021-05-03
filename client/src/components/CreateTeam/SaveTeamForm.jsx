@@ -1,30 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+import styles from './index.module.scss';
 
-const SaveTeamForm = () => {
+const SaveTeamForm = ({ saveTeam }) => {
   const Input = {
     width: '200px',
+  };
+
+  const [teamName, setTeamName] = useState('');
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    saveTeam(teamName);
   };
 
   return (
     <form
       id="team-form"
       className="pure-form pure-form-stacked"
-      action="/addTeam"
-      method="post"
+      onSubmit={e => handleSubmit(e)}
       style={{ gap: '0.2em' }}>
-      <div>
-        <label className="bold" htmlFor="user-field">
-          Username
-        </label>
-        <input
-          type="text"
-          placeholder="Username"
-          id="user-field"
-          maxLength="20"
-          required
-          style={Input}
-        />
-      </div>
       <div>
         <label className="bold" htmlFor="team-name-field">
           Team Name
@@ -36,11 +30,13 @@ const SaveTeamForm = () => {
           maxLength="20"
           required
           style={Input}
+          value={teamName}
+          onChange={e => setTeamName(e.target.value)}
         />
       </div>
-      <div>
-        <button className="pure-button pure-button-primary">Save Team</button>
-      </div>
+      <button className={`pure-button pure-button-primary ${styles.button} ${styles.buttonSave}`}>
+        Save Team
+      </button>
     </form>
   );
 };

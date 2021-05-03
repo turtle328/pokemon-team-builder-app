@@ -1,7 +1,11 @@
 const path = require('path');
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const passport = require('passport');
+
+const MongoStore = require('connect-mongo')(session);
+
 const router = require('./router');
 
 const app = express();
@@ -26,13 +30,41 @@ mongoose.connect(mongoUrl, mongoOptions, (err) => {
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../client/build')));
-// Use the built-in body parser for incoming json data
+// Use the built-in body parser for json and urlencoded
 app.use(express.json());
-// Use cookie parser
-app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
+// Session Setup
+const sessionStore = new MongoStore({
+  mongooseConnection: mongoose.connection,
+  collection: 'sessions',
+});
+app.use(
+  session({
+    secret: 'Bq87^s57BQRS',
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
+  }),
+);
+
+// Passport authentication
+require('./config/passport');
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// app.use((req, res, next) => {
+//   console.log(req.session);
+//   console.log(req.user);
+//   next();
+// });
+
+// Express router
 router(app);
 
+// Start the server
 app.listen(port, (err) => {
   if (err) {
     throw err;

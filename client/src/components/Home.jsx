@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import pokemonLogo from '../media/pokemon-team-builder.png';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.a`
   font-weight: bold;
   color: #3b4cca;
 
@@ -56,25 +56,32 @@ const Home = () => {
             Want to build your dream Pokémon team? You've come to the right place!
           </p>
           <p style={Paragraph}>
-            Visit the <StyledLink to="/create-team">app</StyledLink> to create your own team!
+            Use the log in or sign in buttons in the top right corner of the page to get started.
           </p>
           <p style={Paragraph}>
-            Feeling lucky? Try a <StyledLink to="/random-team">random team</StyledLink>!
+            Once you are signed in you can access the{' '}
+            <StyledLink href="/create-team">create-team</StyledLink> page to build your teams.
           </p>
           <p style={Paragraph}>
-            View or change up your saved team <StyledLink to="/edit-team">here</StyledLink>.
+            You can also use the <StyledLink href="/random-team">random-team</StyledLink> page to
+            generate random teams fun and random nuzlocke runs.
+          </p>
+          <p style={Paragraph}>
+            Finally you can visit the <StyledLink href="/edit-team">edit-team</StyledLink> page to
+            edit your own teams or even view another user's team and edit it as your own.
           </p>
         </Box>
         <Box>
           <BoxTitle>Developers</BoxTitle>
           <p style={Paragraph}>The Pokemon Team Builder API currently has two main endpoints.</p>
           <p style={Paragraph}>
-            <StyledLink to="/getTeams">/getTeams</StyledLink> &mdash; Gets the entire list of teams
-            stored on the server.
+            <StyledLink href="/getTeams">/getTeams</StyledLink> &mdash; Gets the entire list of
+            teams stored on the server.
           </p>
           <p style={Paragraph}>
-            <StyledLink to="/getTeam?user=x">/getTeam?user=x</StyledLink> &mdash; Gets a team under
-            a specified username. If the user does not exist it will return false for "success".
+            <StyledLink href="/getTeam?user=x">/getTeam?user=x</StyledLink> &mdash; Gets a team
+            under a specified username. If the user does not exist it will return false for
+            "success".
           </p>
           <p style={Paragraph}>
             Both endpoints respond in JSON by default but they can send XML instead if a 'text/xml'
@@ -84,11 +91,22 @@ const Home = () => {
         <Box>
           <BoxTitle>Administrators</BoxTitle>
           <p style={Paragraph}>
-            Head to the <StyledLink to="/admin">admin</StyledLink> page to manage the teams saved on
-            the server. Admins can edit teams and even remove users.
+            Head to the <StyledLink href="/admin">admin</StyledLink> page to manage the teams saved
+            on the server. Admins can edit teams and even remove users.
           </p>
           <p style={Paragraph}>
-            Check out the <StyledLink to="/page-not-found">404</StyledLink> page.
+            Check out the{' '}
+            <StyledLink as={Link} to="/page-not-found">
+              404
+            </StyledLink>{' '}
+            page.
+          </p>
+          <p style={Paragraph}>
+            Check out the{' '}
+            <StyledLink as={Link} to="/unauthorized">
+              unauthorized
+            </StyledLink>{' '}
+            page.
           </p>
           <p style={Paragraph}>
             Like the logo? Make your own{' '}

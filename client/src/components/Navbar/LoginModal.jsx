@@ -15,30 +15,32 @@ const LoginModal = ({ isOpen, setModalOpen, setUser }) => {
     setPassword('');
   };
 
-  const onSubmit = async e => {
+  const onSubmit = e => {
     e.preventDefault();
-
-    try {
-      const res = await fetch('/authenticate', {
-        method: 'POST',
-        body: JSON.stringify({ username, password }),
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (res.ok) {
-        setModalOpen(false);
-        setUser(username);
-        openSnackbar('Login successful!');
-      } else {
-        const resJson = await res.json();
-        openSnackbar(resJson.message);
-      }
-    } catch (err) {
-      console.error(err);
-      openSnackbar('An error occurred while trying to login. Please try again.');
-    }
-
     resetForm();
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    };
+
+    fetch('/login', requestOptions)
+      .then(res => {
+        if (res.ok) {
+          setModalOpen(false);
+          setUser(username);
+          openSnackbar('Login successful!');
+        } else if (res.status === 401) {
+          openSnackbar('Invalid username or password.');
+        } else {
+          openSnackbar('An unknown error occurred. Please try again.');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        openSnackbar('An error occurred while trying to login. Please try again.');
+      });
   };
 
   return (
