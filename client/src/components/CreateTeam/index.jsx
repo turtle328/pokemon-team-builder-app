@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import PokemonSlot from './PokemonSlot';
 import PokemonSearchForm from './PokemonSearchForm';
-import SaveTeamForm from './SaveTeamForm';
+import SaveTeamForm from '../SaveTeamForm';
 import PokemonContainer from './PokemonContainer';
 import Pokemon from '../../js/classes/Pokemon';
 import styled from 'styled-components';
@@ -220,7 +220,28 @@ const CreateTeam = () => {
     setPokemonList(list);
   };
 
-  const saveTeam = teamName => {
+  const replaceTeam = async teamObj => {
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(teamObj),
+    };
+
+    try {
+      const res = await fetch('/team', requestOptions);
+      if (res.redirected) {
+        return history.push('/unauthorized');
+      } else {
+        const json = await res.json();
+        openSnackbar(json.message);
+      }
+    } catch (err) {
+      console.log(err);
+      openSnackbar('An occured while trying to update the team.');
+    }
+  };
+
+  const saveTeam = async teamName => {
     // get team with filtered empty slots
     const filteredTeam = team.filter(pokemon => !pokemon.isDefault());
 
@@ -232,22 +253,28 @@ const CreateTeam = () => {
     const teamObj = { teamName, filteredTeam };
 
     const requestOptions = {
-      method: 'PUT',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(teamObj),
     };
 
-    fetch('/saveTeam', requestOptions)
+    fetch('/team', requestOptions)
       .then(res => {
         if (res.redirected) {
           return history.push('/unauthorized');
+        } else if (res.status === 202) {
+          if (
+            window.confirm('A team with this name already exists, do you want to overwrite it?')
+          ) {
+            replaceTeam(teamObj);
+          }
         } else {
           return res.json();
         }
       })
-      .then(data => {
-        if (data) {
-          openSnackbar(data.message);
+      .then(json => {
+        if (json) {
+          openSnackbar(json.message);
         }
       });
   };
@@ -283,7 +310,7 @@ const CreateTeam = () => {
             <Heading>Pokemon Search</Heading>
             <PokemonSearchForm filterPokemonList={filterPokemonList} />
           </div>
-          <div id="team-save">
+          <div id="team-save" style={{padding: '0 1em'}}>
             <Heading>Save Team</Heading>
             <SaveTeamForm saveTeam={saveTeam} />
           </div>

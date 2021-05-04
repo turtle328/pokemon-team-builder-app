@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import styles from './index.module.scss';
+import styled from 'styled-components';
+
+const Form = styled.form`
+  display: flex;
+`;
+
+const SaveButton = styled.button`
+  align-self: flex-end;
+  margin-left: 10px;
+  width: 130px;
+  margin-bottom: 4px;
+`;
 
 const SaveTeamForm = ({ saveTeam }) => {
   const Input = {
@@ -14,11 +25,7 @@ const SaveTeamForm = ({ saveTeam }) => {
   };
 
   return (
-    <form
-      id="team-form"
-      className="pure-form pure-form-stacked"
-      onSubmit={e => handleSubmit(e)}
-      style={{ gap: '0.2em' }}>
+    <Form className="pure-form pure-form-stacked" onSubmit={e => handleSubmit(e)}>
       <div>
         <label className="bold" htmlFor="team-name-field">
           Team Name
@@ -34,10 +41,8 @@ const SaveTeamForm = ({ saveTeam }) => {
           onChange={e => setTeamName(e.target.value)}
         />
       </div>
-      <button className={`pure-button pure-button-primary ${styles.button} ${styles.buttonSave}`}>
-        Save Team
-      </button>
-    </form>
+      <SaveButton className={`pure-button pure-button-primary`}>Save Team</SaveButton>
+    </Form>
   );
 };
 

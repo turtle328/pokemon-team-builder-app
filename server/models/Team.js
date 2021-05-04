@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const TeamSchema = new mongoose.Schema({
   name: {
-    type: 'String',
+    type: String,
     required: true,
   },
   team: [
@@ -12,8 +12,12 @@ const TeamSchema = new mongoose.Schema({
       sprite: { type: String },
     },
   ],
-  owner: {
-    type: mongoose.Schema.ObjectId,
+  username: {
+    type: String,
+    required: true,
+  },
+  userId: {
+    type: String,
     required: true,
   },
 });

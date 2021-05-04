@@ -20,6 +20,7 @@ const mongoOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
+  useFindAndModify: false,
 };
 
 mongoose.connect(mongoUrl, mongoOptions, (err) => {
