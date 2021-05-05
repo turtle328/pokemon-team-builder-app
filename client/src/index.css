@@ -13,7 +13,12 @@
   padding: 0;
 }
 
-html, button, input, select, textarea, .pure-g [class *="pure-u"] {
+html,
+button,
+input,
+select,
+textarea,
+.pure-g [class*='pure-u'] {
   /* Set your content font stack here: */
   font-family: 'Poppins', sans-serif;
 }
@@ -27,6 +32,11 @@ body {
   font-weight: bold;
 }
 
+.aligned-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .button-danger {
   color: white;
   background: rgb(202, 60, 60);
@@ -36,6 +46,10 @@ body {
 .pure-form input[type='search'],
 .pure-form input[type='password'] {
   border: 1px solid black;
+}
+
+.pure-form legend {
+  border-bottom: 1px solid #7685cb;
 }
 
 #search-form,

@@ -25,7 +25,7 @@ const GenerationControls = ({ generate }) => {
   };
 
   return (
-    <form className="pure-form pure-u-1" id="generation-form" onSubmit={e => handleSubmit(e)}>
+    <form className="pure-form pure-u-1" onSubmit={e => handleSubmit(e)}>
       <fieldset>
         <legend className={styles.legend}>Generation Options</legend>
         <RadioLabel htmlFor="random-any">

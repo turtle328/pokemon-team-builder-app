@@ -19,4 +19,54 @@ const typeColors = {
   fairy: '#D685AD',
 };
 
-export { typeColors };
+const replaceTeam = async teamObj => {
+  const requestOptions = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(teamObj),
+  };
+
+  try {
+    const res = await fetch('/team', requestOptions);
+    if (res.redirected) {
+      window.location = 'unauthorized';
+    } else {
+      const json = await res.json();
+      return json.message;
+    }
+  } catch (err) {
+    console.log(err);
+    return 'An occured while trying to update the team.';
+  }
+};
+
+const saveTeam = async (name, team) => {
+  const teamObj = { name, team };
+
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(teamObj),
+  };
+
+  try {
+    const res = await fetch('team', requestOptions);
+    if (res.redirected) {
+      window.location = 'unauthorized';
+    } else if (res.status === 202) {
+      if (window.confirm('A team with this name already exists, do you want to overwrite it?')) {
+        return replaceTeam(teamObj);
+      }
+    } else {
+      const json = await res.json();
+      if (json) {
+        return json.message;
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    return 'An occured while trying to update the team.';
+  }
+};
+
+export { typeColors, saveTeam };

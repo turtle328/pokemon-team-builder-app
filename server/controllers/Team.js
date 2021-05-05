@@ -4,7 +4,7 @@ const Team = require('../models/Team');
 const getTeams = async (req, res) => {};
 
 const addTeam = async (req, res) => {
-  const { teamName: name, filteredTeam: team } = req.body;
+  const { name, team } = req.body;
 
   // get username and id that will be associated with the team
   const { username, _id: userId } = req.user;
@@ -21,7 +21,10 @@ const addTeam = async (req, res) => {
   }
 
   const newTeam = new Team({
-    name, team, username, userId,
+    name,
+    team,
+    username,
+    userId,
   });
 
   try {
@@ -35,14 +38,17 @@ const addTeam = async (req, res) => {
 };
 
 const replaceTeam = async (req, res) => {
-  const { teamName: name, filteredTeam: team } = req.body;
+  const { name, team } = req.body;
   const { username, _id: userId } = req.user;
   const newTeam = {
-    name, team, username, userId,
+    name,
+    team,
+    username,
+    userId,
   };
 
   try {
-    const replacedTeam = await Team.findOneAndReplace({ name, userId }, newTeam);
+    const replacedTeam = await Team.findOneAndReplace({ name, userId }, newTeam, { new: true });
     console.log(replacedTeam);
     res.status(200).json({ message: 'Team was successfully overwritten!' });
   } catch (err) {

@@ -21,24 +21,26 @@ const PokemonName = styled.p`
   text-align: center;
 `;
 
+const getBackgroundStyle = pokemon => {
+  if (!pokemon) return;
+
+  const types = pokemon.types;
+
+  if (types.length === 1) {
+    return { backgroundColor: `${typeColors[types[0]]}` };
+  } else {
+    return {
+      background: `linear-gradient(90deg, ${typeColors[types[0]]} 50%,
+       ${typeColors[types[1]]} 50%)`,
+    };
+  }
+};
+
 const PokemonContainer = ({ pokemon, setTeamSlot }) => {
-  const getBackgroundStyle = () => {
-    const types = pokemon.types;
-
-    if (types.length === 1) {
-      return { backgroundColor: `${typeColors[types[0]]}` };
-    } else {
-      return {
-        background: `linear-gradient(90deg, ${typeColors[types[0]]} 50%,
-         ${typeColors[types[1]]} 50%)`,
-      };
-    }
-  };
-
   return (
-    <Container onClick={() => setTeamSlot(pokemon)} style={getBackgroundStyle()}>
+    <Container onClick={() => setTeamSlot(pokemon)} style={getBackgroundStyle(pokemon)}>
       <img src={pokemon.sprite} alt={`sprite of ${pokemon.name}`} className="pure-img" />
-      <PokemonName>{pokemon.name}</PokemonName>
+      <PokemonName className="pure-u-1">{pokemon.name}</PokemonName>
     </Container>
   );
 };

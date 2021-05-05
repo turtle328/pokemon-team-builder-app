@@ -96,15 +96,15 @@ const Home = () => {
           </p>
           <p style={Paragraph}>
             Check out the{' '}
-            <StyledLink as={Link} to="/page-not-found">
-              404
+            <StyledLink as={Link} to="/unauthorized">
+              403 - unauthorized
             </StyledLink>{' '}
             page.
           </p>
           <p style={Paragraph}>
             Check out the{' '}
-            <StyledLink as={Link} to="/unauthorized">
-              unauthorized
+            <StyledLink as={Link} to="/page-not-found">
+              404 - page not found
             </StyledLink>{' '}
             page.
           </p>
