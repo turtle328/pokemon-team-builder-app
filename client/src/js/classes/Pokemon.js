@@ -1,5 +1,7 @@
 import DefaultSprite from '../../media/team-placeholder.jpg';
 
+const BASE_URL = 'https://pokeapi.co/api/v2';
+
 class Pokemon {
   constructor(name = '???', types = ['Type'], sprite = DefaultSprite) {
     this.name = name;
@@ -27,6 +29,12 @@ class Pokemon {
 
   static getSpriteFromApi(data) {
     return data.sprites.other['official-artwork'].front_default;
+  }
+
+  static async fetchById(id) {
+    const res = await fetch(`${BASE_URL}/pokemon/${id}`);
+    const data = await res.json();
+    return Pokemon.instanceFromApi(data);
   }
 }
 

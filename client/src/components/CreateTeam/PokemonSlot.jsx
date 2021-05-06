@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { typeColors } from '../../js/shared';
+import { TYPE_COLORS } from '../../js/shared';
 
 const TeamSlot = styled.div`
   text-align: center;
@@ -39,7 +39,7 @@ const PokemonSlot = ({ pokemon, slotNum, removeFromSlot }) => {
             <PokemonType
               key={index}
               isDefault={pokemon.isDefault()}
-              style={{ backgroundColor: typeColors[type] }}>
+              style={{ backgroundColor: TYPE_COLORS[type] }}>
               {type}
             </PokemonType>
           );

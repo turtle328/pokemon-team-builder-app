@@ -40,6 +40,7 @@ const Home = () => {
   };
 
   return (
+
     <main style={{ padding: '2em 15%' }} className="pure-g">
       <h1 className="pure-u-1">
         <img

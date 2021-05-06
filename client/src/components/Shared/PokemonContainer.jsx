@@ -1,16 +1,24 @@
 import React from 'react';
-import { typeColors } from '../../js/shared';
-import styled from 'styled-components';
+import { TYPE_COLORS } from '../../js/shared';
+import styled, { css } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
-  cursor: pointer;
+  position: relative;
+  cursor: ${props => (props.isRandom ? 'default' : 'pointer')};
   border: 2px solid black;
   transition: transform 0.2s;
   height: fit-content;
+  user-select: none;
 
-  &:hover {
-    transform: scale(1.1);
-  }
+  ${props =>
+    !props.isRandom &&
+    css`
+      &:hover {
+        transform: scale(1.1);
+      }
+    `}
 `;
 
 const PokemonName = styled.p`
@@ -21,17 +29,25 @@ const PokemonName = styled.p`
   text-align: center;
 `;
 
+const Lock = styled(FontAwesomeIcon)`
+  font-size: 2em;
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  cursor: pointer;
+`;
+
 const getBackgroundStyle = pokemon => {
   if (!pokemon) return;
 
   const types = pokemon.types;
 
   if (types.length === 1) {
-    return { backgroundColor: `${typeColors[types[0]]}` };
+    return { backgroundColor: `${TYPE_COLORS[types[0]]}` };
   } else {
     return {
-      background: `linear-gradient(90deg, ${typeColors[types[0]]} 50%,
-       ${typeColors[types[1]]} 50%)`,
+      background: `linear-gradient(90deg, ${TYPE_COLORS[types[0]]} 50%,
+       ${TYPE_COLORS[types[1]]} 50%)`,
     };
   }
 };
@@ -45,4 +61,15 @@ const PokemonContainer = ({ pokemon, setTeamSlot }) => {
   );
 };
 
+const RandomPokemonContainer = ({ pokemon, isLocked, index, toggleLock }) => {
+  return (
+    <Container isRandom={true} style={getBackgroundStyle(pokemon)}>
+      <Lock icon={isLocked ? faLock : faUnlock} onClick={() => toggleLock(index)} />
+      <img src={pokemon.sprite} alt={`sprite of ${pokemon.name}`} className="pure-img" />
+      <PokemonName className="pure-u-1">{pokemon.name}</PokemonName>
+    </Container>
+  );
+};
+
 export default PokemonContainer;
+export { RandomPokemonContainer };

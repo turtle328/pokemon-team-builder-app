@@ -10,7 +10,7 @@ const GenerateButton = styled.button`
   margin-left: 10px;
 `;
 
-const GenerationControls = ({ generate }) => {
+const GenerationControls = ({ generate, isLoading, setIsLoading }) => {
   const typeSelect = {
     padding: '0.1em 0.2em',
   };
@@ -21,6 +21,8 @@ const GenerationControls = ({ generate }) => {
   const handleSubmit = e => {
     e.preventDefault();
     const generationOptions = { generationType, selectedType };
+    console.log(setIsLoading);
+    setIsLoading(true);
     generate(generationOptions);
   };
 
@@ -85,7 +87,7 @@ const GenerationControls = ({ generate }) => {
           <option value="dark">Dark</option>
           <option value="fairy">Fairy</option>
         </select>
-        <GenerateButton className="pure-button pure-button-primary">Generate</GenerateButton>
+        <GenerateButton disabled={isLoading} className="pure-button pure-button-primary">Generate</GenerateButton>
       </fieldset>
     </form>
   );

@@ -1,4 +1,4 @@
-const typeColors = {
+const TYPE_COLORS = {
   normal: '#A8A77A',
   fighting: '#C22E28',
   flying: '#A98FF3',
@@ -69,4 +69,4 @@ const saveTeam = async (name, team) => {
   }
 };
 
-export { typeColors, saveTeam };
+export { TYPE_COLORS, saveTeam };
