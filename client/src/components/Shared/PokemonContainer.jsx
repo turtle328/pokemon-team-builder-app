@@ -6,14 +6,14 @@ import { faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
   position: relative;
-  cursor: ${props => (props.isRandom ? 'default' : 'pointer')};
+  cursor: ${props => (props.isHover ? 'pointer' : 'default')};
   border: 2px solid black;
   transition: transform 0.2s;
   height: fit-content;
   user-select: none;
 
   ${props =>
-    !props.isRandom &&
+    props.isHover &&
     css`
       &:hover {
         transform: scale(1.1);
@@ -52,9 +52,21 @@ const getBackgroundStyle = pokemon => {
   }
 };
 
-const PokemonContainer = ({ pokemon, setTeamSlot }) => {
+const PokemonContainer = ({ pokemon }) => {
   return (
-    <Container onClick={() => setTeamSlot(pokemon)} style={getBackgroundStyle(pokemon)}>
+    <Container style={getBackgroundStyle(pokemon)}>
+      <img src={pokemon.sprite} alt={`sprite of ${pokemon.name}`} className="pure-img" />
+      <PokemonName className="pure-u-1">{pokemon.name}</PokemonName>
+    </Container>
+  );
+};
+
+const AddPokemonContainer = ({ pokemon, setTeamSlot }) => {
+  return (
+    <Container
+      isHover={true}
+      onClick={() => setTeamSlot(pokemon)}
+      style={getBackgroundStyle(pokemon)}>
       <img src={pokemon.sprite} alt={`sprite of ${pokemon.name}`} className="pure-img" />
       <PokemonName className="pure-u-1">{pokemon.name}</PokemonName>
     </Container>
@@ -63,7 +75,7 @@ const PokemonContainer = ({ pokemon, setTeamSlot }) => {
 
 const RandomPokemonContainer = ({ pokemon, isLocked, index, toggleLock }) => {
   return (
-    <Container isRandom={true} style={getBackgroundStyle(pokemon)}>
+    <Container style={getBackgroundStyle(pokemon)}>
       <Lock icon={isLocked ? faLock : faUnlock} onClick={() => toggleLock(index)} />
       <img src={pokemon.sprite} alt={`sprite of ${pokemon.name}`} className="pure-img" />
       <PokemonName className="pure-u-1">{pokemon.name}</PokemonName>
@@ -72,4 +84,4 @@ const RandomPokemonContainer = ({ pokemon, isLocked, index, toggleLock }) => {
 };
 
 export default PokemonContainer;
-export { RandomPokemonContainer };
+export { AddPokemonContainer, RandomPokemonContainer };

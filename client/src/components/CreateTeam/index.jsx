@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import PokemonSlot from './PokemonSlot';
 import PokemonSearchForm from './PokemonSearchForm';
 import SaveTeamForm from '../Shared/SaveTeamForm';
-import PokemonContainer from '../Shared/PokemonContainer';
+import { AddPokemonContainer } from '../Shared/PokemonContainer';
 import Pokemon from '../../js/classes/Pokemon';
 import styled from 'styled-components';
 import { SpinnerComponent } from 'react-element-spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { useSnackbar } from 'react-simple-snackbar';
+import { useLocation } from 'react-router-dom';
 import * as shared from '../../js/shared';
 
 const Container = styled.main`
@@ -102,6 +103,7 @@ const CreateTeam = () => {
   const [isCollapsed, setCollapsed] = useState(false);
 
   const [openSnackbar] = useSnackbar();
+  const location = useLocation();
 
   useEffect(() => {
     const getPokemon = async () => {
@@ -111,9 +113,7 @@ const CreateTeam = () => {
         // parse the list into an array
         const parsedList = JSON.parse(list);
         // convert the list of "Pokemon" into real ES6 Pokemon classes using the constructor
-        pokemonList.current = parsedList.map(
-          pokemon => new Pokemon(pokemon.name, pokemon.types, pokemon.sprite)
-        );
+        pokemonList.current = parsedList.map(pokeObj => Pokemon.instanceFromObject(pokeObj));
       }
       // otherwise grab the data from the server and save it to storage
       else {
@@ -126,6 +126,11 @@ const CreateTeam = () => {
     };
 
     getPokemon();
+
+    if (location.state) {
+      const { team } = location.state;
+      setTeam(team);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -274,7 +279,7 @@ const CreateTeam = () => {
       <PokemonSelection panelIsCollapsed={isCollapsed}>
         <SpinnerComponent loading={isActive} position="global" message="Fetching Pokedex" />
         {filteredList.map((pokemon, index) => {
-          return <PokemonContainer key={index} pokemon={pokemon} setTeamSlot={setTeamSlot} />;
+          return <AddPokemonContainer key={index} pokemon={pokemon} setTeamSlot={setTeamSlot} />;
         })}
       </PokemonSelection>
     </Container>

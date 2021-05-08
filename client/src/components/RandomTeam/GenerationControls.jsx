@@ -11,17 +11,12 @@ const GenerateButton = styled.button`
 `;
 
 const GenerationControls = ({ generate, isLoading, setIsLoading }) => {
-  const typeSelect = {
-    padding: '0.1em 0.2em',
-  };
-
   const [generationType, setGenerationType] = useState('random-any');
   const [selectedType, setSelectedType] = useState('normal');
 
   const handleSubmit = e => {
     e.preventDefault();
     const generationOptions = { generationType, selectedType };
-    console.log(setIsLoading);
     setIsLoading(true);
     generate(generationOptions);
   };
@@ -64,7 +59,6 @@ const GenerationControls = ({ generate, isLoading, setIsLoading }) => {
           Type
         </RadioLabel>
         <select
-          style={typeSelect}
           disabled={generationType !== 'random-type'}
           value={selectedType}
           onChange={e => setSelectedType(e.target.value)}>
@@ -87,7 +81,9 @@ const GenerationControls = ({ generate, isLoading, setIsLoading }) => {
           <option value="dark">Dark</option>
           <option value="fairy">Fairy</option>
         </select>
-        <GenerateButton disabled={isLoading} className="pure-button pure-button-primary">Generate</GenerateButton>
+        <GenerateButton disabled={isLoading} className="pure-button pure-button-primary">
+          Generate
+        </GenerateButton>
       </fieldset>
     </form>
   );

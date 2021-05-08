@@ -23,7 +23,7 @@ const InfoContainer = styled.section`
 const Box = styled.div`
   width: 400px;
   min-height: 400px;
-  padding: 1em;
+  padding: 1em 2em;
   border: inset 4px black;
   background-color: var(--pokemon-yellow);
   border-radius: 1em;
@@ -35,12 +35,7 @@ const BoxTitle = styled.h2`
 `;
 
 const Home = () => {
-  const Paragraph = {
-    margin: '0.8em',
-  };
-
   return (
-
     <main style={{ padding: '2em 15%' }} className="pure-g">
       <h1 className="pure-u-1">
         <img
@@ -53,63 +48,54 @@ const Home = () => {
       <InfoContainer className="pure-u-1">
         <Box>
           <BoxTitle>Users</BoxTitle>
-          <p style={Paragraph}>
+          <p className="paragraph">
             Want to build your dream Pokémon team? You've come to the right place!
           </p>
-          <p style={Paragraph}>
+          <p className="paragraph">
             Use the log in or sign in buttons in the top right corner of the page to get started.
           </p>
-          <p style={Paragraph}>
+          <p className="paragraph">
             Once you are signed in you can access the{' '}
             <StyledLink href="/create-team">create-team</StyledLink> page to build your teams.
           </p>
-          <p style={Paragraph}>
+          <p className="paragraph">
             You can also use the <StyledLink href="/random-team">random-team</StyledLink> page to
             generate random teams fun and random nuzlocke runs.
           </p>
-          <p style={Paragraph}>
+          <p className="paragraph">
             Finally you can visit the <StyledLink href="/edit-team">edit-team</StyledLink> page to
             edit your own teams or even view another user's team and edit it as your own.
           </p>
         </Box>
         <Box>
           <BoxTitle>Developers</BoxTitle>
-          <p style={Paragraph}>The Pokemon Team Builder API currently has two main endpoints.</p>
-          <p style={Paragraph}>
-            <StyledLink href="/getTeams">/getTeams</StyledLink> &mdash; Gets the entire list of
-            teams stored on the server.
-          </p>
-          <p style={Paragraph}>
-            <StyledLink href="/getTeam?user=x">/getTeam?user=x</StyledLink> &mdash; Gets a team
-            under a specified username. If the user does not exist it will return false for
-            "success".
-          </p>
-          <p style={Paragraph}>
-            Both endpoints respond in JSON by default but they can send XML instead if a 'text/xml'
-            Accept header is used.
+          <p className="paragraph">The Pokemon Team Builder API currently has one main endpoint.</p>
+          <p className="paragraph">
+            <StyledLink href="/getTeams">/team:username</StyledLink> &mdash; Gets the list of all
+            the teams stored on that user.
           </p>
         </Box>
         <Box>
           <BoxTitle>Administrators</BoxTitle>
-          <p style={Paragraph}>
-            Head to the <StyledLink href="/admin">admin</StyledLink> page to manage the teams saved
+          <p className="paragraph">
+            Head to the <StyledLink href="/admin">admin</StyledLink> page to manage users and teams saved
             on the server. Admins can edit teams and even remove users.
           </p>
-          <p style={Paragraph}>
+          <p className="paragraph">
             Check out the{' '}
             <StyledLink as={Link} to="/unauthorized">
               403 - unauthorized
             </StyledLink>{' '}
             page.
           </p>
-          <p style={Paragraph}>
+          <p className="paragraph">
             Check out the{' '}
             <StyledLink as={Link} to="/page-not-found">
               404 - page not found
             </StyledLink>{' '}
             page.
           </p>
-          <p style={Paragraph}>
+          <p className="paragraph">
             Like the logo? Make your own{' '}
             <StyledLink as="a" href="https://textcraft.net/">
               here

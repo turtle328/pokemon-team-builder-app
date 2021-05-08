@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const SaveButton = styled.button`
@@ -10,11 +11,8 @@ const SaveButton = styled.button`
 `;
 
 const SaveTeamForm = ({ saveTeam, hideLegend = false }) => {
-  const Input = {
-    width: '200px',
-  };
-
-  const [teamName, setTeamName] = useState('');
+  const location = useLocation();
+  const [teamName, setTeamName] = useState(location.state?.name);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -37,7 +35,7 @@ const SaveTeamForm = ({ saveTeam, hideLegend = false }) => {
             id="team-name-field"
             maxLength="20"
             required
-            style={Input}
+            style={{ width: '200px' }}
             value={teamName}
             onChange={e => setTeamName(e.target.value)}
           />

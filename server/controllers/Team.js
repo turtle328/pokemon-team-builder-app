@@ -1,7 +1,29 @@
 const Team = require('../models/Team');
 
 // get team associated with the user
-const getTeams = async (req, res) => {};
+const getTeams = async (req, res) => {
+  let username = req.params.username;
+  if (!username) {
+    // if username is undefined, grab the username from the session
+    username = req.user.username;
+  }
+
+  const teams = await Team.find({ username }, { name: 1, team: 1, _id: 0 }).lean();
+  const teamLen = teams.length;
+
+  if (teamLen <= 0) {
+    return res.status(200).json({ message: `No teams were found for ${username}` });
+  }
+
+  const message =
+    teamLen === 1
+      ? `1 team was found for ${username}`
+      : `${teamLen} teams were found for ${username}`;
+
+  return res.status(200).json({ teams, message });
+
+  //console.log('Getting team off MongoDB for user: ' + username);
+};
 
 const addTeam = async (req, res) => {
   const { name, team } = req.body;

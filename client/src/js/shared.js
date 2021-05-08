@@ -69,4 +69,12 @@ const saveTeam = async (name, team) => {
   }
 };
 
-export { TYPE_COLORS, saveTeam };
+// https://stackoverflow.com/a/65244270/7838349
+const arrayToN = N => {
+  let i = 0,
+    a = Array(N);
+  while (i < N) a[i++] = i;
+  return a;
+};
+
+export { TYPE_COLORS, saveTeam, arrayToN };

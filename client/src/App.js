@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import CreateTeam from './components/CreateTeam';
 import RandomTeam from './components/RandomTeam';
-import EditTeam from './components/EditTeam';
+import ViewTeam from './components/ViewTeam';
 import Admin from './components/Admin';
 import PageNotFound from './components/PageNotFound';
 import Unauthorized from './components/Unauthorized';
@@ -32,7 +32,7 @@ function App() {
           <RandomTeam />
         </Route>
         <Route path="/edit-team">
-          <EditTeam />
+          <ViewTeam />
         </Route>
         <Route path="/admin">
           <Admin />

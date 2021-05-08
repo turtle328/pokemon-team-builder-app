@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
-import styles from './index.module.scss';
 import styled from 'styled-components';
-import { SpinnerComponent } from 'react-element-spinner';
+import { useSnackbar } from 'react-simple-snackbar';
+import { useLocation } from 'react-router-dom';
 import GenerationControls from './GenerationControls';
 import SaveTeamForm from '../Shared/SaveTeamForm';
-import { RandomPokemonContainer } from '../Shared/PokemonContainer';
+import { TeamViewRandom } from '../Shared/TeamView';
 import * as shared from '../../js/shared';
 import Pokemon from '../../js/classes/Pokemon';
-
-const TeamView = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
-  padding: 4px;
-`;
 
 const ControlsContainer = styled.div`
   display: flex;
   gap: 10px;
 `;
 
+// get a random number up to a maximum number
+const getRand = max => {
+  return Math.floor(Math.random() * max);
+};
+
+// get a random number between two numbers
 const getRandBetween = (min, max) => {
   return Math.floor(Math.random() * max - min + 1) + min;
 };
@@ -31,14 +30,30 @@ const RandomTeam = () => {
   const MISSING_CHAINS = [210, 222, 225, 226, 227, 231, 238, 251];
   const BASE_URL = 'https://pokeapi.co/api/v2';
 
-  const [team, setTeam] = useState(new Array(TEAM_SIZE).fill(new Pokemon()));
+  const location = useLocation();
+
+  const [team, setTeam] = useState(
+    location.state ? location.state.team : new Array(TEAM_SIZE).fill(new Pokemon())
+  );
   const [lockedSlots, setLockedSlots] = useState(new Array(TEAM_SIZE).fill(false));
   const [isLoading, setIsLoading] = useState(false);
+
+  const [openSnackbar] = useSnackbar();
 
   const toggleLock = index => {
     const copy = [...lockedSlots];
     copy[index] = !copy[index];
     setLockedSlots(copy);
+  };
+
+  const getIdFromSpeciesUrl = url => {
+    const match = url.match(/pokemon-species\/(\d+)/);
+    return match[1];
+  };
+
+  const getIdFromPokemonUrl = url => {
+    const match = url.match(/pokemon\/(\d+)/);
+    return match[1];
   };
 
   const generate = async generationOptions => {
@@ -103,7 +118,7 @@ const RandomTeam = () => {
         let id = getIdFromSpeciesUrl(chain.species.url);
         let evolves_to = chain.evolves_to;
         while (evolves_to.length > 0) {
-          const randNum = Math.floor(Math.random() * evolves_to.length);
+          const randNum = getRand(evolves_to.length);
           id = getIdFromSpeciesUrl(evolves_to[randNum].species.url);
           evolves_to = evolves_to[randNum].evolves_to;
         }
@@ -114,35 +129,48 @@ const RandomTeam = () => {
     return pokemon;
   };
 
-  const getIdFromSpeciesUrl = url => {
-    const match = url.match(/pokemon-species\/(\d+)/);
-    return match[1];
-  };
-
   const generateTypeTeam = async (unlockedSlots, type) => {
     console.log('Generating type team of ' + type);
+
+    const url = `${BASE_URL}/type/${type}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const pokemonList = data.pokemon;
+    const pokemon = await Promise.all(
+      unlockedSlots.map(async slot => {
+        let id;
+        do {
+          const randIndex = getRand(pokemonList.length);
+          const pokeUrl = pokemonList[randIndex].pokemon.url;
+          id = getIdFromPokemonUrl(pokeUrl);
+        } while (id > MAX_POKEMON);
+        return Pokemon.fetchById(id);
+      })
+    );
+
+    return pokemon;
   };
 
   const saveTeam = async teamName => {
     console.log('Saving team');
     console.log(teamName);
-    // // get team with filtered empty slots
-    // const filteredTeam = team.filter(pokemon => !pokemon.isDefault());
+    // get team with filtered empty slots
+    const filteredTeam = team.filter(pokemon => !pokemon.isDefault());
 
-    // // check if team has any slots
-    // if (filteredTeam.length === 0) {
-    //   return openSnackbar('The team needs at least one Pokemon.');
-    // }
+    // check if team has any slots
+    if (filteredTeam.length === 0) {
+      return openSnackbar('The team needs at least one Pokemon.');
+    }
 
-    // const response = await shared.saveTeam(teamName, filteredTeam);
-    // if (response) {
-    //   openSnackbar(response);
-    // }
+    const response = await shared.saveTeam(teamName, filteredTeam);
+    if (response) {
+      openSnackbar(response);
+    }
   };
 
   return (
-    <div className={`pure-g ${styles.content}`}>
-      <div className={`pure-u-1 ${styles.controlsContainer}`}>
+    <div className={`pure-g padded-container`}>
+      <div className={`pure-u-1 yellow-box`}>
         <ControlsContainer>
           <GenerationControls
             generate={generate}
@@ -153,20 +181,12 @@ const RandomTeam = () => {
         </ControlsContainer>
       </div>
 
-      <TeamView>
-        <SpinnerComponent loading={isLoading} position="centered" message="Generating pokemon" />
-        {team.map((pokemon, index) => {
-          return (
-            <RandomPokemonContainer
-              key={index}
-              pokemon={pokemon}
-              isLocked={lockedSlots[index]}
-              index={index}
-              toggleLock={toggleLock}
-            />
-          );
-        })}
-      </TeamView>
+      <TeamViewRandom
+        team={team}
+        isLoading={isLoading}
+        lockedSlots={lockedSlots}
+        toggleLock={toggleLock}
+      />
     </div>
   );
 };

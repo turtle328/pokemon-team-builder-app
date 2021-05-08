@@ -19,10 +19,23 @@ const SignUpModal = ({ isOpen, setModalOpen }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
+
+    // trim username, and passwords
+    const trimmedUser = username.trim();
+    const trimmedPass = password.trim();
+    const trimmedPass2 = password2.trim();
+
+    console.log(trimmedUser.length);
+
+    if (!trimmedUser || !trimmedPass || !trimmedPass2) {
+      openSnackbar('Username and password must not be empty.');
+      return;
+    }
+
     try {
       const res = await fetch('/register', {
         method: 'POST',
-        body: JSON.stringify({ username, password, password2 }),
+        body: JSON.stringify({ username: trimmedUser, password: trimmedPass, password2: trimmedPass2 }),
         headers: { 'Content-Type': 'application/json' },
       });
       const resJson = await res.json();
