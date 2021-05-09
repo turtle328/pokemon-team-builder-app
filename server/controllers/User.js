@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Team = require('../models/Team');
 const { genPassword } = require('../lib/passwordUtils');
 
 const registerUser = (req, res) => {
@@ -48,9 +49,39 @@ const getUsername = (req, res) => {
   return res.status(200).json({ username: '' });
 };
 
+// return an array of all the users on the server
+const getUser = async (req, res) => {
+  const users = await User.find({}, { username: 1 }).lean();
+  res.status(200).json(users);
+};
+
+const deleteUser = async (req, res) => {
+  const { username } = req.params;
+  console.log(`Deleting ${username} and their teams`);
+
+  // check if you are deleting yourself
+  if (username === req.user.username) {
+    return res.status(400).json({ message: 'You cannot delete yourself.' });
+  }
+  try {
+    const teamPromise = Team.deleteMany({ username });
+    const userPromise = User.deleteOne({ username });
+    const queries = await Promise.all([teamPromise, userPromise]);
+    const [teamQuery] = queries;
+    return res
+      .status(200)
+      .json({ message: `Deleted ${username} and deleted ${teamQuery.deletedCount} teams.` });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: 'An error occurred.' });
+  }
+};
+
 module.exports = {
   registerUser,
   login,
   logout,
   getUsername,
+  getUser,
+  deleteUser,
 };

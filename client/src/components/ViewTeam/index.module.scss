@@ -2,14 +2,14 @@
   min-width: 200px;
 }
 
+.wrap {
+  flex-flow: wrap;
+}
+
 .flexContainer {
   display: flex;
   align-items: flex-end;
   gap: 0.5em;
-}
-
-.wrap {
-  flex-flow: wrap;
 }
 
 .button {

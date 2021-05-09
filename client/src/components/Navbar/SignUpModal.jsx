@@ -25,8 +25,6 @@ const SignUpModal = ({ isOpen, setModalOpen }) => {
     const trimmedPass = password.trim();
     const trimmedPass2 = password2.trim();
 
-    console.log(trimmedUser.length);
-
     if (!trimmedUser || !trimmedPass || !trimmedPass2) {
       openSnackbar('Username and password must not be empty.');
       return;

@@ -122,7 +122,6 @@ const CreateTeam = () => {
       }
       setPokemonList(pokemonList.current);
       setActive(false);
-      console.log(pokemonList.current);
     };
 
     getPokemon();
@@ -177,7 +176,17 @@ const CreateTeam = () => {
 
   const filterPokemonList = filters => {
     let list = [...pokemonList.current];
-    const { types, searchType, search } = filters;
+    const { types, searchType, search, generations } = filters;
+
+    if (!generations.includes('any')) {
+      let newList = [];
+      generations.forEach(generation => {
+        const [start, end] = generation.split(',');
+        // start is -1 since arrays start from 0
+        newList = newList.concat(list.slice(start - 1, end));
+      });
+      list = newList;
+    }
 
     if (!types.includes('any')) {
       list = list.filter(pokemon => {

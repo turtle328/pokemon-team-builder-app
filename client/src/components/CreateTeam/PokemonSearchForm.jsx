@@ -3,17 +3,19 @@ import styles from './index.module.scss';
 
 const PokemonSearchForm = ({ filterPokemonList }) => {
   const [types, setTypes] = useState(['any']);
+  const [generations, setGenerations] = useState(['any']);
   const [searchType, setSearchType] = useState('and');
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState('');
 
   const handleSubmit = e => {
     e.preventDefault();
-    const filters = { types, searchType, search };
+    const filters = { types, searchType, search, generations };
     filterPokemonList(filters);
   };
 
   const resetFilters = e => {
     setTypes(['any']);
+    setGenerations(['any']);
     setSearchType('and');
     setSearch('');
   };
@@ -97,6 +99,27 @@ const PokemonSearchForm = ({ filterPokemonList }) => {
           />{' '}
           ONLY
         </label>
+      </div>
+      <div id="generation">
+        <label htmlFor="generationSelect" className="bold">
+          Pokemon Generation
+        </label>
+        <select
+          style={{ width: '150px' }}
+          multiple={true}
+          value={generations}
+          onChange={e =>
+            setGenerations(Array.from(e.target.selectedOptions, option => option.value))
+          }
+          id="generationSelect">
+          <option value="any">Any</option>
+          <option value="1,151">Gen 1</option>
+          <option value="152,251">Gen 2</option>
+          <option value="252,386">Gen 3</option>
+          <option value="387,494">Gen 4</option>
+          <option value="495,649">Gen 5</option>
+          <option value="650,721">Gen 6</option>
+        </select>
       </div>
       <div style={{ display: 'flex', gridColumn: '1 / span 2' }}>
         <label className="bold" htmlFor="search-bar">

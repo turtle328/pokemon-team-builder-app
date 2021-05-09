@@ -2,7 +2,7 @@ const Team = require('../models/Team');
 
 // get team associated with the user
 const getTeams = async (req, res) => {
-  let username = req.params.username;
+  let { username } = req.params;
   if (!username) {
     // if username is undefined, grab the username from the session
     username = req.user.username;
@@ -15,14 +15,11 @@ const getTeams = async (req, res) => {
     return res.status(200).json({ message: `No teams were found for ${username}` });
   }
 
-  const message =
-    teamLen === 1
-      ? `1 team was found for ${username}`
-      : `${teamLen} teams were found for ${username}`;
+  const message = teamLen === 1
+    ? `1 team was found for ${username}`
+    : `${teamLen} teams were found for ${username}`;
 
   return res.status(200).json({ teams, message });
-
-  //console.log('Getting team off MongoDB for user: ' + username);
 };
 
 const addTeam = async (req, res) => {
@@ -52,10 +49,10 @@ const addTeam = async (req, res) => {
   try {
     const savedTeam = await newTeam.save();
     console.log(savedTeam);
-    res.status(201).json({ message: 'Team successfully saved!' });
+    return res.status(201).json({ message: 'Team successfully saved!' });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'An error occurred while saving the team.' });
+    return res.status(500).json({ message: 'An error occurred while saving the team.' });
   }
 };
 
@@ -79,8 +76,29 @@ const replaceTeam = async (req, res) => {
   }
 };
 
+const deleteTeam = async (req, res) => {
+  const { name, username } = req.params;
+
+  if (!name || !username) {
+    res.status(400).json({ message: 'Bad request, missing name or username.' });
+  }
+
+  try {
+    const query = await Team.deleteOne({ name, username });
+    if (query.deletedCount === 1) {
+      res.status(200).json({ message: 'Team was successfully deleted.' });
+    } else {
+      res.status(400).json({ message: 'The team is already deleted.' });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'An error occurred.' });
+  }
+};
+
 module.exports = {
   getTeams,
   addTeam,
   replaceTeam,
+  deleteTeam,
 };

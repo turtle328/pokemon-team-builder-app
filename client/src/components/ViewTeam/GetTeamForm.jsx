@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import styles from './index.module.scss';
 import { useSnackbar } from 'react-simple-snackbar';
-import { useHistory } from 'react-router-dom';
-import Pokemon from '../../js/classes/Pokemon';
-
-const TEAM_SIZE = 6;
+import EditTeamButtons from '../Shared/EditTeamButtons';
 
 const GetTeamForm = ({ setTeam }) => {
   const [username, setUsername] = useState('');
@@ -12,10 +9,9 @@ const GetTeamForm = ({ setTeam }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const [openSnackbar] = useSnackbar();
-  const history = useHistory();
 
   const fetchTeam = async () => {
-    console.log('fetching the teams from the server for user: ' + username);
+    console.log('Fetching the teams from the server for user: ' + username);
     const res = await fetch(`/team/${username}`);
     const data = await res.json();
     const teamsJson = data.teams;
@@ -31,16 +27,6 @@ const GetTeamForm = ({ setTeam }) => {
     const teamObj = teams[index];
     setSelectedIndex(index);
     setTeam(teamObj.team);
-  };
-
-  const redirectWithTeamData = url => {
-    const { name, team } = teams[selectedIndex];
-    // convert objects into pokemon objects with ES6 class methods
-    // also pads the array with default pokemon objects if it's less than the max team size
-    const convertedTeam = team
-      .map(pokeObj => Pokemon.instanceFromObject(pokeObj))
-      .concat(new Array(TEAM_SIZE - team.length).fill(new Pokemon()));
-    history.push(url, { name, team: convertedTeam });
   };
 
   return (
@@ -83,20 +69,7 @@ const GetTeamForm = ({ setTeam }) => {
                 })}
               </select>
             </div>
-            <div className={styles.flexContainer}>
-              <button
-                className={`pure-button pure-button-primary ${styles.button}`}
-                disabled={teams.length === 0}
-                onClick={() => redirectWithTeamData('/create-team')}>
-                Edit Team
-              </button>
-              <button
-                className={`pure-button pure-button-primary ${styles.button}`}
-                disabled={teams.length === 0}
-                onClick={() => redirectWithTeamData('/random-team')}>
-                Edit Team Random
-              </button>
-            </div>
+            <EditTeamButtons teamObj={teams[selectedIndex]} />
           </div>
         </div>
       </fieldset>

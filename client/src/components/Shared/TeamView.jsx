@@ -8,14 +8,14 @@ const TEAM_SIZE = 6;
 
 const TeamViewContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(${props => props.cols}, 1fr);
   gap: 5px;
-  padding: 4px;
+  padding: ${props => props.cols === 3 && '4px'};
 `;
 
-const TeamView = ({ team }) => {
+const TeamView = ({ team, cols = 3 }) => {
   return (
-    <TeamViewContainer>
+    <TeamViewContainer cols={cols}>
       {team.concat(new Array(TEAM_SIZE - team.length).fill(new Pokemon())).map((pokemon, index) => {
         return <PokemonContainer key={index} pokemon={pokemon} />;
       })}
@@ -25,7 +25,7 @@ const TeamView = ({ team }) => {
 
 const TeamViewRandom = ({ isLoading, team, lockedSlots, toggleLock }) => {
   return (
-    <TeamViewContainer>
+    <TeamViewContainer cols={3}>
       <SpinnerComponent loading={isLoading} position="centered" message="Generating pokemon" />
       {team.map((pokemon, index) => {
         return (

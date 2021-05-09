@@ -153,7 +153,6 @@ const RandomTeam = () => {
 
   const saveTeam = async teamName => {
     console.log('Saving team');
-    console.log(teamName);
     // get team with filtered empty slots
     const filteredTeam = team.filter(pokemon => !pokemon.isDefault());
 

@@ -10,7 +10,7 @@ const TeamSchema = new mongoose.Schema({
       name: { type: String },
       types: [{ type: String }],
       sprite: { type: String },
-      _id: false
+      _id: false,
     },
   ],
   username: {

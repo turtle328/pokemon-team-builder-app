@@ -53,6 +53,10 @@ body {
   display: flex;
 }
 
+.bordered {
+  border-bottom: 1px solid #7685cb;
+}
+
 .yellow-box {
   font-weight: 400;
   margin-top: 10px;

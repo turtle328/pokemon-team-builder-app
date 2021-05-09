@@ -71,7 +71,7 @@ const Home = () => {
           <BoxTitle>Developers</BoxTitle>
           <p className="paragraph">The Pokemon Team Builder API currently has one main endpoint.</p>
           <p className="paragraph">
-            <StyledLink href="/getTeams">/team:username</StyledLink> &mdash; Gets the list of all
+            <StyledLink href="/team">/team/:username</StyledLink> &mdash; Gets the list of all
             the teams stored on that user.
           </p>
         </Box>

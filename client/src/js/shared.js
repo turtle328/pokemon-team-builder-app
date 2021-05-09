@@ -77,4 +77,9 @@ const arrayToN = N => {
   return a;
 };
 
-export { TYPE_COLORS, saveTeam, arrayToN };
+const arrayFromToN = (i, N) => {
+  let a = Array(N - i);
+  while (i < N) a[i++] = i;
+};
+
+export { TYPE_COLORS, saveTeam, arrayToN, arrayFromToN };

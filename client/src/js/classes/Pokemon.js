@@ -21,6 +21,10 @@ class Pokemon {
     return new Pokemon(name, types, sprite);
   }
 
+  static instanceFromObject(obj) {
+    return new Pokemon(obj.name, obj.types, obj.sprite);
+  }
+
   static getTypesArrayFromApi(data) {
     return data.types.map(type => {
       return type.type.name;
