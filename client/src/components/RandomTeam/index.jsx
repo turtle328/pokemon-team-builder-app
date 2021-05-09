@@ -40,22 +40,26 @@ const RandomTeam = () => {
 
   const [openSnackbar] = useSnackbar();
 
+  // toggles whether the lock is locked or unlocked for a given index
   const toggleLock = index => {
     const copy = [...lockedSlots];
     copy[index] = !copy[index];
     setLockedSlots(copy);
   };
 
+  // gets the id from the pokeapi's species url
   const getIdFromSpeciesUrl = url => {
     const match = url.match(/pokemon-species\/(\d+)/);
     return match[1];
   };
 
+  // gets the id from the pokeai's pokemon url
   const getIdFromPokemonUrl = url => {
     const match = url.match(/pokemon\/(\d+)/);
     return match[1];
   };
 
+  // generate pokemon given the generation perameters
   const generate = async generationOptions => {
     const unlockedSlots = [];
     for (let i = 0; i < TEAM_SIZE; i++) {
@@ -89,6 +93,7 @@ const RandomTeam = () => {
     setIsLoading(false);
   };
 
+  // generates a team of any type of pokemon
   const generateAnyTeam = async unlockedSlots => {
     console.log('Generating any team');
 
@@ -102,6 +107,7 @@ const RandomTeam = () => {
     return pokemon;
   };
 
+  // generates a team with only fully evolved pokemon
   const generateFeoTeam = async unlockedSlots => {
     console.log('Generating feo team');
 
@@ -129,6 +135,7 @@ const RandomTeam = () => {
     return pokemon;
   };
 
+  // generates a team of pokemon for a specific type
   const generateTypeTeam = async (unlockedSlots, type) => {
     console.log('Generating type team of ' + type);
 
@@ -151,6 +158,7 @@ const RandomTeam = () => {
     return pokemon;
   };
 
+  // saves a team of pokemon to the server
   const saveTeam = async teamName => {
     console.log('Saving team');
     // get team with filtered empty slots

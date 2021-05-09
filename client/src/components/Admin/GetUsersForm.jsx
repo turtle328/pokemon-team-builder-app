@@ -8,6 +8,7 @@ const GetUsersForm = ({ getTeams }) => {
   const [users, setUsers] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  // fetch users off the server
   const fetchUsers = async () => {
     const res = await fetch('/user');
     const data = await res.json();
@@ -17,6 +18,7 @@ const GetUsersForm = ({ getTeams }) => {
     getTeams(data[0].username);
   };
 
+  // delete a given user and their teams
   const deleteUser = async () => {
     if (
       !window.confirm('Are you sure you want to delete this user? All their teams will be deleted.')
@@ -34,6 +36,8 @@ const GetUsersForm = ({ getTeams }) => {
     }
   };
 
+  // fires off whenever the user selcct changes
+  // and automatically grabs the team for the newly selected user
   const handleSelectChange = e => {
     const index = e.target.value;
     setSelectedIndex(index);

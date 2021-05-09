@@ -3,6 +3,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/User');
 const { validPassword } = require('../lib/passwordUtils');
 
+// this is a passport.js function that verifies whether the user exists
+// and whether the encrypted password is correct
 const verifyCallback = (username, password, done) => {
   User.findOne({ username }, (err, user) => {
     if (err) {

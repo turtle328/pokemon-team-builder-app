@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 const LogoutMenu = ({ user, setUser }) => {
   const history = useHistory();
 
+  // logs the user out and redirects them back to the home page
   const signOut = () => {
     fetch('/logout').then(res => {
       if (res.redirected) {

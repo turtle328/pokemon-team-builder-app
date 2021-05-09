@@ -1,3 +1,4 @@
+// types and their correpsonding colors in hex format
 const TYPE_COLORS = {
   normal: '#A8A77A',
   fighting: '#C22E28',
@@ -19,6 +20,7 @@ const TYPE_COLORS = {
   fairy: '#D685AD',
 };
 
+// makes a put request to the server with the given team object
 const replaceTeam = async teamObj => {
   const requestOptions = {
     method: 'PUT',
@@ -40,6 +42,7 @@ const replaceTeam = async teamObj => {
   }
 };
 
+// make a post request to the server with the given team object
 const saveTeam = async (name, team) => {
   const teamObj = { name, team };
 
@@ -77,6 +80,9 @@ const arrayToN = N => {
   return a;
 };
 
+// modified version that starts from any inital value
+// didn't end needing this as I went for an alternative approach
+// that involved concatening arrays, but I will keep this around in case I need it later.
 const arrayFromToN = (i, N) => {
   let a = Array(N - i);
   while (i < N) a[i++] = i;

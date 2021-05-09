@@ -2,6 +2,7 @@ const passport = require('passport');
 const controllers = require('./controllers');
 const middleware = require('./middleware');
 
+// app router
 const router = (app) => {
   app.post('/register', controllers.User.registerUser);
   app.post('/login', passport.authenticate('local'), controllers.User.login);

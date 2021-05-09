@@ -9,6 +9,7 @@ const Admin = () => {
   const [teams, setTeams] = useState([]);
   const [showSnackbar] = useSnackbar();
 
+  // get teams off the server for a specific user
   const getTeams = async username => {
     const res = await fetch(`/team/${username}`);
     const data = await res.json();
@@ -16,6 +17,7 @@ const Admin = () => {
     user.current = username;
   };
 
+  // delete team for a specific user and team name
   const deleteTeam = async teamName => {
     const res = await fetch(`/team/${teamName}/${user.current}`, { method: 'DELETE' });
     const data = await res.json();

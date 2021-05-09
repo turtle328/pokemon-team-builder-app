@@ -15,6 +15,7 @@ const LoginModal = ({ isOpen, setModalOpen, setUser }) => {
     setPassword('');
   };
 
+  // tries to login to the server with the inputted password and username
   const onSubmit = e => {
     e.preventDefault();
     resetForm();

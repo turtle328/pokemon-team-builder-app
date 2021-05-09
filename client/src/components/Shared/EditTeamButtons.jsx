@@ -8,6 +8,7 @@ const TEAM_SIZE = 6;
 const EditTeamButtons = ({ teamObj, deleteTeam }) => {
   const history = useHistory();
 
+  // redirects you to another page of a specified url and with the team data pushed into the location state
   const redirectWithTeamData = url => {
     const { name, team } = teamObj;
     // convert objects into pokemon objects with ES6 class methods

@@ -10,6 +10,7 @@ const GetTeamForm = ({ setTeam }) => {
 
   const [openSnackbar] = useSnackbar();
 
+  // fetches the teams of a given user
   const fetchTeam = async () => {
     console.log('Fetching the teams from the server for user: ' + username);
     const res = await fetch(`/team/${username}`);
@@ -17,11 +18,13 @@ const GetTeamForm = ({ setTeam }) => {
     const teamsJson = data.teams;
     if (teamsJson) {
       setTeams(teamsJson);
+      // default the select to the first team
       setTeam(teamsJson[0].team);
     }
     openSnackbar(data.message);
   };
 
+  // updates the team whenever the select value is changed
   const handleSelectTeam = e => {
     const index = e.target.value;
     const teamObj = teams[index];

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// A model for what a team document would look like
 const TeamSchema = new mongoose.Schema({
   name: {
     type: String,

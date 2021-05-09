@@ -22,6 +22,7 @@ const getTeams = async (req, res) => {
   return res.status(200).json({ teams, message });
 };
 
+// this is a post request to add a team to the server
 const addTeam = async (req, res) => {
   const { name, team } = req.body;
 
@@ -56,6 +57,7 @@ const addTeam = async (req, res) => {
   }
 };
 
+// this gets called by a put request to the /team endpoint
 const replaceTeam = async (req, res) => {
   const { name, team } = req.body;
   const { username, _id: userId } = req.user;
@@ -76,6 +78,7 @@ const replaceTeam = async (req, res) => {
   }
 };
 
+// delete's a team of a given username and their team name
 const deleteTeam = async (req, res) => {
   const { name, username } = req.params;
 

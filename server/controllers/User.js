@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Team = require('../models/Team');
 const { genPassword } = require('../lib/passwordUtils');
 
+// register the user on the server
 const registerUser = (req, res) => {
   const { username, password, password2 } = req.body;
 
@@ -33,14 +34,17 @@ const registerUser = (req, res) => {
     });
 };
 
+// simple login message, not more is needed due the middleware
 const login = (req, res) => res.status(200).json({ message: 'Login successful!' });
 
+// calls the password.js logout function and redirects you to the home page
 const logout = (req, res) => {
   req.logout();
   // returns you to the home page
   return res.redirect('/');
 };
 
+// get username that is stored in this session
 const getUsername = (req, res) => {
   const username = req?.user?.username;
   if (username) {
@@ -55,6 +59,7 @@ const getUser = async (req, res) => {
   res.status(200).json(users);
 };
 
+// deletes a user from the server
 const deleteUser = async (req, res) => {
   const { username } = req.params;
   console.log(`Deleting ${username} and their teams`);

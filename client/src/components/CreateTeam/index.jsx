@@ -126,6 +126,7 @@ const CreateTeam = () => {
 
     getPokemon();
 
+    // check if it was redirect with state data
     if (location.state) {
       const { team } = location.state;
       setTeam(team);
@@ -133,6 +134,7 @@ const CreateTeam = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // fetch list of pokemon from the pokeapi server
   const fetchPokemon = async () => {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${COUNT}`);
     const data = await res.json();
@@ -140,6 +142,8 @@ const CreateTeam = () => {
     return pokeList;
   };
 
+  // uses the generated poke urls to build a list of all the pokemon
+  // uses Promise.all to make sure all requests are made asynchronously
   const fetchPokemonFromList = async list => {
     const pokeList = await Promise.all(
       list.map(async pokemon => {
@@ -152,6 +156,7 @@ const CreateTeam = () => {
     return pokeList;
   };
 
+  // adds a pokemon to the team
   const setTeamSlot = pokemon => {
     // find an empty index of the array
     const index = team.findIndex(pokemon => pokemon.isDefault());
@@ -163,6 +168,7 @@ const CreateTeam = () => {
     setTeam(newTeam);
   };
 
+  // remove a pokemon a team slot
   const removePokemonFromSlot = (pokemon, slot) => {
     if (pokemon.isDefault()) return;
 
@@ -174,11 +180,13 @@ const CreateTeam = () => {
     setTeam(newTeam);
   };
 
+  // a rather large function that takes in filter params and
+  // updates the pokedex to anything that matches the filter
   const filterPokemonList = filters => {
     let list = [...pokemonList.current];
     const { types, searchType, search, generations } = filters;
 
-    if (!generations.includes('any')) {
+    if (!generations.includes('any') && generations.length > 0) {
       let newList = [];
       generations.forEach(generation => {
         const [start, end] = generation.split(',');
@@ -188,7 +196,7 @@ const CreateTeam = () => {
       list = newList;
     }
 
-    if (!types.includes('any')) {
+    if (!types.includes('any') && types.length > 0) {
       list = list.filter(pokemon => {
         switch (searchType) {
           case 'and':
@@ -233,6 +241,7 @@ const CreateTeam = () => {
     setPokemonList(list);
   };
 
+  // saves the team information to the server
   const saveTeam = async teamName => {
     // get team with filtered empty slots
     const filteredTeam = team.filter(pokemon => !pokemon.isDefault());

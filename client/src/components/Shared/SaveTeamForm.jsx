@@ -14,6 +14,7 @@ const SaveTeamForm = ({ saveTeam, hideLegend = false }) => {
   const location = useLocation();
   const [teamName, setTeamName] = useState(location.state?.name);
 
+  // simple function that passes on the inputed user name into the saveTeam callback
   const handleSubmit = e => {
     e.preventDefault();
     saveTeam(teamName);

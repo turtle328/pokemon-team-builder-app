@@ -13,7 +13,7 @@ const router = require('./router');
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Set up mongoose instance
+// Set up mongoose instance using dotenv library to pull in the connection string
 const mongoUrl = process.env.DB_STRING;
 
 const mongoOptions = {
@@ -23,6 +23,7 @@ const mongoOptions = {
   useFindAndModify: false,
 };
 
+// connect to the mongoDB
 mongoose.connect(mongoUrl, mongoOptions, (err) => {
   if (err) {
     throw err;

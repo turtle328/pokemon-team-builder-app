@@ -14,6 +14,7 @@ const GenerationControls = ({ generate, isLoading, setIsLoading }) => {
   const [generationType, setGenerationType] = useState('random-any');
   const [selectedType, setSelectedType] = useState('normal');
 
+  // gets all the generatin options and sends it to the parent componenent to generate pokemon
   const handleSubmit = e => {
     e.preventDefault();
     const generationOptions = { generationType, selectedType };

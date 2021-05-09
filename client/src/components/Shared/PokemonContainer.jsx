@@ -37,6 +37,7 @@ const Lock = styled(FontAwesomeIcon)`
   cursor: pointer;
 `;
 
+// function that allows the pokemon container's background to represent it's typing
 const getBackgroundStyle = pokemon => {
   if (!pokemon) return;
 

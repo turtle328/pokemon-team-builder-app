@@ -17,6 +17,7 @@ const SignUpModal = ({ isOpen, setModalOpen }) => {
     setPassword2('');
   };
 
+  // attempts to create a new account on the server using the form data and the /register endpoint
   const onSubmit = async e => {
     e.preventDefault();
 
@@ -33,7 +34,11 @@ const SignUpModal = ({ isOpen, setModalOpen }) => {
     try {
       const res = await fetch('/register', {
         method: 'POST',
-        body: JSON.stringify({ username: trimmedUser, password: trimmedPass, password2: trimmedPass2 }),
+        body: JSON.stringify({
+          username: trimmedUser,
+          password: trimmedPass,
+          password2: trimmedPass2,
+        }),
         headers: { 'Content-Type': 'application/json' },
       });
       const resJson = await res.json();

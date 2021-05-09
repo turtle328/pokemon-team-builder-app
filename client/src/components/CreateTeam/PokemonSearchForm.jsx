@@ -7,12 +7,16 @@ const PokemonSearchForm = ({ filterPokemonList }) => {
   const [searchType, setSearchType] = useState('and');
   const [search, setSearch] = useState('');
 
+  // whenever the form is submitted get all the states of the 
+  // inputs and send that over to the parent component to filter the pokedex
   const handleSubmit = e => {
     e.preventDefault();
     const filters = { types, searchType, search, generations };
     filterPokemonList(filters);
   };
 
+  // called when reset button is clicked
+  // sets all the states of the inputs to their default values
   const resetFilters = e => {
     setTypes(['any']);
     setGenerations(['any']);
