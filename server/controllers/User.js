@@ -30,7 +30,7 @@ const registerUser = (req, res) => {
       if (err.code === 11000) {
         return res.status(400).json({ message: 'That user already exists.' });
       }
-      return res.status(400).json({ message: 'An error occurred. Please try again later.' });
+      return res.status(500).json({ message: 'An error occurred. Please try again later.' });
     });
 };
 
