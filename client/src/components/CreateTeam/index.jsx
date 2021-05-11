@@ -129,7 +129,8 @@ const CreateTeam = () => {
     // check if it was redirect with state data
     if (location.state) {
       const { team } = location.state;
-      setTeam(team);
+      const converted = team.map(team => Pokemon.instanceFromObject(team));
+      setTeam(converted);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
