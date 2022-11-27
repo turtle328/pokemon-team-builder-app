@@ -91,7 +91,7 @@ const ExpandIcon = styled(CollapseIcon)`
 `;
 
 const CreateTeam = () => {
-  const COUNT = 721;
+  const COUNT = 10000;
 
   // a variable to save a copy to the full list
   // this is necessary because the state list can be filtered
